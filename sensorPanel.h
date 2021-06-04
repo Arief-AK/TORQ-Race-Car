@@ -16,7 +16,7 @@
 #include "ultrasonicSensor.h"
 #include <Arduino.h>
 
-enum direction {LEFT, RIGHT, FRONT};        // 0 - 1 - 2
+enum direction {LEFT, RIGHT, FRONT, SRIGHT, SLEFT};        // 0 - 1 - 2
 
 
 class SensorPanel

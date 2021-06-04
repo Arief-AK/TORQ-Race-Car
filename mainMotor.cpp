@@ -49,6 +49,6 @@ void MainMotor::rotate_anti_clockwise()
 void MainMotor::rotate_stop()
 {
 	digitalWrite(input_a, LOW);
-	digitalWrite(input_b, LOW);
+	digitalWrite(input_b, HIGH);
 	analogWrite(enable_pin, 0);
 }
