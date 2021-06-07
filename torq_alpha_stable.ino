@@ -33,6 +33,8 @@ int obstacle_trigger = 0; //GLOBAL VARIABLE TO TRACK OBSTACLE CHECKS
 
 int exit_trigger = 0;
 
+int hill_trigger = 0;
+
 
 HardwareInterface hardwareInterface(
         13, A3, //Ultrasonic_LEFT
@@ -71,18 +73,22 @@ void loop() // THE ONE AND THE ONLY RUNNING LOOP, STANDARD ONE
   Serial.print("\n");
   Serial.print("0-LEFT | 1-RIGHT | 2-FRONT : ");
   Serial.print(last_condition);
-//  // RAMP CASE
-//  if(hardwareInterface.sensorPanel.Ultrasonic_RIGHT.get_distance() < 40 && hill_tigger == 0)
-//  {
-//    hardwareInterface.driveShaft.moveForward(1000);
-//    delay(2000);
-//    hardwareInterface.driveShaft.p_mainMotor.stopMovement();
-//    delay(500);
-//    hardwareInterface.driveShaft.powerStart();
-//    delay(500);
-//
-//    hill_trigger++;
-//  }
+  
+  // RAMP CASE
+  if(hardwareInterface.sensorPanel.Ultrasonic_RIGHT.get_distance() < 40 && hill_trigger == 0)
+  {
+    hardwareInterface.driveShaft.p_servoMotor.reset();
+    hardwareInterface.driveShaft.p_mainMotor.rotate_anti_clockwise();
+    delay(1050);    
+    hardwareInterface.driveShaft.moveForward(MAX_SPEED);
+    delay(2000);
+    hardwareInterface.driveShaft.stopMovement();
+    delay(500);
+    hardwareInterface.driveShaft.powerStart();
+    delay(500);
+
+    hill_trigger++;
+  }
 
   // Ultrasonic distance check if it is below threshold, avoid obstacle
   if(hardwareInterface.sensorPanel.Ultrasonic_LEFT.get_distance() < threshold && obstacle_trigger == 0)
@@ -106,13 +112,11 @@ void loop() // THE ONE AND THE ONLY RUNNING LOOP, STANDARD ONE
       delay(600);
       hardwareInterface.driveShaft.turnLeft(TURNING_SPEED, 14);
       delay(1000);
-      hardwareInterface.driveShaft.moveForward(120);
-      delay(800);
-      hardwareInterface.driveShaft.moveForward(90);
-      delay(350);
+      hardwareInterface.driveShaft.moveForward(100);
+      delay(300);
 
       current_speed = DEFAULT_SPEED;
-      last_condition = FRONT;
+      last_condition = LEFT;
     }
   }
   else
